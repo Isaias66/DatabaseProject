@@ -76,7 +76,7 @@ def queryTwo(arg):
         print("MySQL connection is closed")
 
 
-#@Param: A string variable containing a scheduler system
+#@Param: None
 #@Output: 
 def queryThree():
     mycursor = mydb.cursor()
@@ -93,6 +93,113 @@ def queryThree():
     
     for row in record:        
         print(row[1])
+
+#@Param: 
+#@Output:
+def queryFour(arg):
+    mycursor = mydb.cursor()
+    param = arg
+    
+    sql = "SELECT * FROM Client WHERE phone = %s"
+    val = (param,)
+
+    mycursor.execute(sql,val)
+    record = mycursor.fetchall()
+
+    for row in record:
+        print("clientID ", row[0], )
+        print("Name: ", row[1])
+        print("Phone: ", row[2])
+        print("Address: ", row[3], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")
+
+
+#@Param: None
+#@Output: 
+def queryFive():
+    mycursor = mydb.cursor()
+    
+    sql = "SELECT b.empId, b.name, a.hours FROM AdmWorkHours as a, Administrator as b WHERE a.empId = b.empId ORDER BY a.hours asc;"
+
+    mycursor.execute(sql)
+    record = mycursor.fetchall()
+
+    # NOTE: I am unsure if this is the correct info for the total hours, this may need to be reviewed
+    for row in record:
+        print("EmpId: ", row[0], )
+        print("Name: ", row[1])
+        print("Hours: ", row[2], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")   
+
+#@Param: A model Number, string 
+#@Output: The names of the technical supports who work on the specified model.
+def querySix(arg):
+    mycursor = mydb.cursor()
+    param = arg
+    
+    sql = "SELECT t.name FROM TechnicalSupport as t, Specializes as s WHERE t.empId = s.empId and s.modelNo = %s;"
+    val = (param,)
+
+    mycursor.execute(sql,val)
+    record = mycursor.fetchall()
+
+    for row in record:
+        print("Name of Tech. Support: ", row[0], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")
+
+#@Param: None
+#@Output: 
+def querySeven():
+    mycursor = mydb.cursor()
+
+    ##NOTE: WIP this is not the correct SQL statement
+    sql = "SELECT s.name, avg(p.commissionRate) FROM Salesman as s, Purchases as p WHERE s.empId = p.empId ORDER BY p.commissionRate desc;"
+
+    mycursor.execute(sql)
+    record = mycursor.fetchall()
+
+    # NOTE: The output is only one salesman which is not correct, WIP
+    for row in record:
+        print("Name: ", row[0], )
+        print("Avg.CommisionRate: ", row[1], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")   
+
+
+#@Param: None
+#@Output: 
+def queryEight():
+    mycursor = mydb.cursor()
+
+    ##NOTE: WIP this is not the correct SQL statement
+    sql = ""
+
+    mycursor.execute(sql)
+    record = mycursor.fetchall()
+
+    # NOTE:WIP
+    for row in record:
+        print("")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")   
 
 def main():
 
@@ -114,23 +221,23 @@ def main():
         
     #Question Num: 4
     elif len(args) == 2 and args[0] == '4':
-        print("WE got 4")
+        queryFour(args[1])
 
     #Question Num: 5
-    elif len(args) == 2 and args[0] == '5':
-        print("WE got 5")
+    elif len(args) == 1 and args[0] == '5':
+        queryFive()
 
     #Question Num: 6
     elif len(args) == 2 and args[0] == '6':
-        print("WE got 6")
+        querySix(args[1])
 
     #Question Num: 7
-    elif len(args) == 2 and args[0] == '7':
-        print("WE got 7")
+    elif len(args) == 1 and args[0] == '7':
+        querySeven()
 
     #Question Num: 8
-    elif len(args) == 2 and args[0] == '8':
-        print("WE got 8")
+    elif len(args) == 1 and args[0] == '8':
+        queryEight()
 
     #No arguments were recieved
     elif len(args) == 0:
