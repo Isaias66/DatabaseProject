@@ -32,7 +32,6 @@ mydb = mysql.connector.connect(
 #        statement is printed on per line and contains all
 #        attributes for the specified site
 def queryOne(arg):
-    print("Query One")
     mycursor = mydb.cursor()
     param = arg
     
@@ -40,15 +39,23 @@ def queryOne(arg):
     val = (param,)
 
     mycursor.execute(sql)
-    myresult = mycursor.fetchall()
+    record = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    for row in record:
+        print("Site Code: ", row[0],)
+        print("Type: ", row[1])
+        print("Address: ", row[2])
+        print("Phone No. : ", row[3], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")
+
 
 #@Param: A string variable containing a scheduler system
 #@Output: 
 def queryTwo(arg):
-    print("Query Two")
     mycursor = mydb.cursor()
     param = arg
     
@@ -56,10 +63,36 @@ def queryTwo(arg):
     val = (param,)
 
     mycursor.execute(sql,val)
-    myresult = mycursor.fetchall()
+    record = mycursor.fetchall()
 
-    for x in myresult:
-        print(x)
+    for row in record:
+        print("Serial No: ", row[0], )
+        print("Model No: ", row[1])
+        print("Technical Support Name: ", row[2], "\n")
+
+    if (mydb.is_connected()):
+        mydb.close()
+        mycursor.close()
+        print("MySQL connection is closed")
+
+
+#@Param: A string variable containing a scheduler system
+#@Output: 
+def queryThree():
+    mycursor = mydb.cursor()
+
+    sql = "SELECT DISTINCT * FROM Salesman ORDER BY name asc;"  
+
+    mycursor.execute(sql)
+
+    #### WIP
+    print("Name   cnt")
+    print("-------------")
+
+    record = mycursor.fetchall()
+    
+    for row in record:        
+        print(row[1])
 
 def main():
 
@@ -76,8 +109,8 @@ def main():
         queryTwo(args[1])
         
     #Question Num: 3
-    elif len(args) == 2 and args[0] == '3':
-        print("WE got 3")
+    elif len(args) == 1 and args[0] == '3':
+        queryThree()
         
     #Question Num: 4
     elif len(args) == 2 and args[0] == '4':
