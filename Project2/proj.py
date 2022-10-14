@@ -34,7 +34,7 @@ def queryOne(arg):
     mycursor = mydb.cursor()
     param = (arg)
     
-    sql = "SELECT * FROM Site WHERE address LIKE %s"
+    sql = "SELECT * FROM Site WHERE address LIKE %s;"
     val = ("%"+param+"%",)
 
     mycursor.execute(sql,val)
@@ -91,7 +91,8 @@ def queryTwo(arg):
 def queryThree():
     mycursor = mydb.cursor()
 
-    sql = "SELECT DISTINCT * FROM Salesman ORDER BY name asc;"  
+    count = 0
+    sql = "SELECT * FROM Salesman ORDER BY name asc;"  
 
     mycursor.execute(sql)
 
@@ -100,14 +101,13 @@ def queryThree():
     print("-------------")
 
     record = mycursor.fetchall()
-
+    
     #Check if results exist for given query
     if mycursor.rowcount == 0:
         print("No results found for given query\n")
-    #else:
-    
-    for row in record:        
-        print(row[1])
+    else:
+        for row in record:
+            print(row[1])
 
     #Close SQL connection
     if (mydb.is_connected()):
