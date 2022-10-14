@@ -19,7 +19,7 @@ try:
     mydb = mysql.connector.connect(
         host = "localhost",
         user = "dbuser",
-        passwd= "lwilldowell",
+        passwd= "Iwilldowell",
         database="cs482502"
         )
 except mysql.connector.Error as err:
@@ -48,7 +48,7 @@ def queryOne(arg):
             print("Site Code: ", row[0],)
             print("Type: ", row[1])
             print("Address: ", row[2])
-            print("Phone No. : ", row[3], "\n")
+            print("Phone No.: ", row[3], "\n")
 
     #Close SQL connection
     if (mydb.is_connected()):
@@ -110,24 +110,27 @@ def queryThree():
     else:
         for row in record:
             if(row[1]==name):
-                nameList.append(row[1])
+                nameList.append(row)
                 count = count +1
             elif (row[1] is not name and name == ""):
                 name = row[1]
                 count = 1
-                nameList.append(row[1])
+                nameList.append(row)
             elif(row[1] is not name and name != ""):
                 if(count > 1):
-                    print(name + "    " + str(count) + "   " + str(nameList))
+                    print('%-7s %-3d%s' % (name, count, str(nameList)))
+                    #print(name + "    " + str(count) + "   " + str(nameList))
                 else:
-                    print(name + "    " + str(count))
+                    print('%-7s %-3d' % (name, count))
+                    #print(name + "    " + str(count))
                 count = 1
                 name = row[1]
                 nameList = []
+                nameList.append(row)
         if(count > 1):
-            print(name + "    " + str(count) + " " + str(nameList))
+            print('%-7s %-3d%s' % (name, count, str(nameList)))
         else:
-            print(name + "    " + str(count))
+            print('%-7s %-3d' % (name, count))
 
     #Close SQL connection
     if (mydb.is_connected()):
