@@ -32,12 +32,12 @@ except mysql.connector.Error as err:
 #        attributes for the specified site
 def queryOne(arg):
     mycursor = mydb.cursor()
-    param = arg
+    param = (arg)
     
-    sql = "SELECT * FROM Site WHERE address like '% %s, %'"
-    val = (param,)
+    sql = "SELECT * FROM Site WHERE address LIKE %s"
+    val = ("%"+param+"%",)
 
-    mycursor.execute(sql)
+    mycursor.execute(sql,val)
     record = mycursor.fetchall()
 
     #Check if results exist for given query
