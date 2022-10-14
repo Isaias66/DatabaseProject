@@ -89,14 +89,16 @@ def queryTwo(arg):
 #@Output: Displays the distinct names of aall salesmand and frequency of salesmen
 #        with the specified name
 def queryThree():
-    mycursor = mydb.cursor()
 
-    count = 0
+    mycursor = mydb.cursor()
+    count = 1
+    name = ""
+    nameList = []
+    
     sql = "SELECT * FROM Salesman ORDER BY name asc;"  
 
     mycursor.execute(sql)
 
-    #### WIP
     print("Name   cnt")
     print("-------------")
 
@@ -107,7 +109,25 @@ def queryThree():
         print("No results found for given query\n")
     else:
         for row in record:
-            print(row[1])
+            if(row[1]==name):
+                nameList.append(row[1])
+                count = count +1
+            elif (row[1] is not name and name == ""):
+                name = row[1]
+                count = 1
+                nameList.append(row[1])
+            elif(row[1] is not name and name != ""):
+                if(count > 1):
+                    print(name + "    " + str(count) + "   " + str(nameList))
+                else:
+                    print(name + "    " + str(count))
+                count = 1
+                name = row[1]
+                nameList = []
+        if(count > 1):
+            print(name + "    " + str(count) + " " + str(nameList))
+        else:
+            print(name + "    " + str(count))
 
     #Close SQL connection
     if (mydb.is_connected()):
@@ -151,8 +171,7 @@ def queryFour(arg):
 def queryFive():
     mycursor = mydb.cursor()
 
-    #This SQL statement needs to be reviewed WIP
-    sql = "SELECT b.empId, b.name, a.hours FROM AdmWorkHours as a, Administrator as b WHERE a.empId = b.empId ORDER BY a.hours asc;"
+    sql = "SELECT b.empId, b.name, sum(a.hours) total FROM AdmWorkHours as a, Administrator as b WHERE a.empId = b.empId GROUP BY b.empId ORDER BY total asc;"
 
     mycursor.execute(sql)
     record = mycursor.fetchall()
@@ -161,9 +180,8 @@ def queryFive():
     if mycursor.rowcount == 0:
         print("No results found for given query\n")
     else:
-        # NOTE: I am unsure if this is the correct info for the total hours, this may need to be reviewed WIP
         for row in record:
-            print("EmpId: ", row[0], )
+            print("EmpId: ", row[0],)
             print("Name: ", row[1])
             print("Hours: ", row[2], "\n")
 
@@ -206,8 +224,7 @@ def querySix(arg):
 def querySeven():
     mycursor = mydb.cursor()
 
-    ##NOTE: WIP this is not the correct SQL statement
-    sql = "SELECT s.name, avg(p.commissionRate) FROM Salesman as s, Purchases as p WHERE s.empId = p.empId ORDER BY p.commissionRate desc;"
+    sql = "SELECT s.name, avg(p.commissionRate) Average FROM Salesman as s, Purchases as p WHERE s.empId = p.empId GROUP BY s.empId ORDER BY Average desc;"
 
     mycursor.execute(sql)
     record = mycursor.fetchall()
@@ -216,7 +233,6 @@ def querySeven():
     if mycursor.rowcount == 0:
         print("No results found for given query\n")
     else:
-        # NOTE: The output is only one salesman which is not correct, WIP
         for row in record:
             print("Name: ", row[0], )
             print("Avg.CommisionRate: ", row[1], "\n")
