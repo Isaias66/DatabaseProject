@@ -44,9 +44,10 @@ def Login():
         login()
 
 
+#@Param: None
+#@Output: All Display Models with all their attributes listed
+#         in a row format
 def DisplayModel():
-    print("The format for models is: (modelNo, width, height, weight, depth, screenSize)")
-    print("-----------------------------------------------------------------------------")
 
     sql = "SELECT * FROM Model;"
     mycursor.execute(sql)
@@ -64,11 +65,11 @@ def DisplayModel():
             print("Depth: ", row[4],)
             print("ScreenSize: ", row[5], "\n")
 
-        
-def Display():
 
-    print("The format is: (serialNo, schedulerSystem, modelNo)")
-    print("---------------------------------------------------")
+#@Param: None
+#@Output: All Digital Displays with all their attributes listed
+#         in a row format        
+def Display():
 
     sql = "SELECT * FROM DigitalDisplay;"
     mycursor.execute(sql)
@@ -85,12 +86,28 @@ def Display():
 
     
 def Search():
-    search = input("Please enter the scheduler system you want to search with (either \"Random\", \"Smart\", or \"Virtue\" and without quotation marks): ")
-    mycursor.execute("SELECT * FROM DigitalDisplay WHERE schedulerSystem = \"" + search + "\";")
-    print("Systems with scheduler system \"" + search + "\":")
-    for x in mycursor:
-      print(x)
-    
+
+    param = input("Please enter the scheduler system you want to search with (either \"Random\", \"Smart\", or \"Virtue\" and without quotation marks): ")
+
+    sql = "SELECT * FROM DigitalDisplay WHERE schedulerSystem = %s";"
+    val = (param,)
+
+    mycursor.execute(sql,val)
+    #mycursor.execute("SELECT * FROM DigitalDisplay WHERE schedulerSystem = \"" + search + "\";")
+
+    record = mycursor.fetchall()
+
+    #Check if results exist for given query
+    if mycursor.rowcount == 0:
+        print("No results found for given query\n")
+    else:
+        print("Systems with scheduler system \"" + param + "\":")
+        for row in record:
+            print("Serial No: ", row[0], )
+            print("Model No: ", row[1])
+            print("Technical Support Name: ", row[2], "\n")
+
+
 def Insert():
     serialNo = input("Please input a serial number: ")
     scheduler = input("Please input the type of scheduler system (\"Random\", \"Smart\", or \"Virtue\" without quotation marks): ")
