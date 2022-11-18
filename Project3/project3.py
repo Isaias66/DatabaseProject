@@ -20,11 +20,19 @@ import mysql.connector
 def Login():
 
     #Display basic cmd information for user to type in information
-    print("Login:")
+    print("Login: (Note: Type RESET in order to return the start of the login")
     hostVar = input("Enter your host: ")
+    if(hostVar == "RESET"):
+        Login()
     userVar = input("Enter your username: ")
+    if(userVar == "RESET"):
+        Login()
     passwdVar = input("Enter your password: ")
+    if(passwdVar == "RESET"):
+        Login()
     dataVar = input("Enter the name of the database you want to use: ")
+    if(dataVar == "RESET"):
+        Login()
 
     #Check if the connection was successful
     global mydb
@@ -44,7 +52,7 @@ def Login():
     #Else the credentials were incorrect and we redirect back to the login page
     else:
         print("We believed you typed something wrong, try again.")
-        login()
+        Login()
 
 
 #@Param: None
