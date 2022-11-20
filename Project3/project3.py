@@ -19,6 +19,11 @@ import mysql.connector
 #Prompt users to enter information through a command line interface
 def Login():
 
+    hostVar = ""
+    userVar = ""
+    passwdVar = ""
+    dataVar = ""
+    
     #Display basic cmd information for user to type in information
     print("Login: (Note: Type RESET in order to return the start of the login")
     hostVar = input("Enter your host: ")
@@ -138,11 +143,14 @@ def Insert():
     mycursor.execute(sql, val)    
 
     #We display the new changes made to the DB
-    print("Digital Display has been successfully added!")
+    print("\nDigital Display has been successfully added!")
+    print("---------------------------------------------")
     Display()
 
 
-#WIP  Integrity Error------------------------------------------------------------------------------------------------ 
+#@Param: None
+#@Output: All information regarding Digital Displays and Models after the
+#         deletion has occured to show the change in the database
 def Delete():
 
     amount = 0
@@ -157,7 +165,6 @@ def Delete():
     for row in mycursor:
         modelNo = row
 
-    #print(modelNo[0])
     sql2 = "SELECT * FROM DigitalDisplay WHERE modelNo = %s;"
     val2 = (modelNo[0],)
     mycursor.execute(sql2,val2)
@@ -171,6 +178,7 @@ def Delete():
     sql3 = "DELETE FROM DigitalDisplay WHERE serialNo = %s;"
     mycursor.execute(sql3,val)
 
+    #Account for foreign key integrity error if only one instance exists
     if(amount == 1):
         sql4 = "DELETE FROM Specializes WHERE modelNo = %s;"
         val4 = (modelNo[0],)
@@ -180,22 +188,31 @@ def Delete():
         mycursor.execute(sql4,val4) 
 
     #Display results after deletion
+    print("\nSuccessfully made changes to database")
+    print("---------------------------------------")
     Display()
+    print("\nCurrent Models in Database")
+    print("----------------------------------------")
     DisplayModel()
 
-#WIP (Integrity Error()----------------------------------------------------------------------------   
+
+#@Param: None
+#@Output: All information regarding Digital Displays after the
+#         update has occured to show the change in the database  
 def Update():
 
     serialNo = input("Input the serial number of the digital display that you would like to update: ")
     newSerialNo = input("Input the new serial number (or type it again if it is not changing): ")
     newSchedule = input("Input the new scheduler system (or type it again if it is not changing): ")
-    newModelNo = input("Input the new model number (or type it again if it is not changing): ")
+    newModelNo = input("Input an EXISTING model number (or type it again if it is not changing): ")
 
     sql = "UPDATE DigitalDisplay SET serialNo = %s, schedulerSystem = %s, modelNo = %s WHERE serialNo = %s;"
     val = (newSerialNo, newSchedule, newModelNo, serialNo)
     mycursor.execute(sql,val)
 
     #Display changes to the DB
+    print("\nChanges have successfully been made to database")
+    print("-------------------------------------------------")
     Display()
 
 
@@ -224,20 +241,20 @@ def main():
         #Basic Help Information for User
         option = input("\n\nWelcome to your database!\nIn order to display all your devices, type \"Display\".\nIn order to display all your Display Models, type \"DisplayModel\".\nTo search digital displays given a scheduler system, type \"Search\".\nTo insert a new digital display, type \"Insert\".\nTo delete a digital display, type \"Delete\".\nTo update a digital display, type \"Update\".\nTo logout of your account, type \"Logout\".\n")
 
-        #All different functions to handle the user input
-        if(option == "Display"):
+        #All different functions to handle the user input regardless of uppercase or lowercase
+        if(option == "Display" or option == "display"):
             Display()
-        elif(option == "DisplayModel"):
+        elif(option == "DisplayModel" or option == "displaymodel"):
             DisplayModel()
-        elif(option == "Search"):
+        elif(option == "Search" or option == "search"):
             Search()
-        elif(option == "Insert"):
+        elif(option == "Insert" or option == "insert"):
             Insert()
-        elif(option == "Delete"):
+        elif(option == "Delete" or option == "delete"):
             Delete()
-        elif(option == "Update"):
+        elif(option == "Update" or option == "update"):
             Update()
-        elif(option == "Logout"):
+        elif(option == "Logout" or option == "logout"):
             Logout()
 
         #If user input is not recognized then we prompt them to try again
