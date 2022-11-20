@@ -157,22 +157,27 @@ def Delete():
     for row in mycursor:
         modelNo = row
 
-    print(modelNo[0])
+    #print(modelNo[0])
     sql2 = "SELECT * FROM DigitalDisplay WHERE modelNo = %s;"
     val2 = (modelNo[0],)
     mycursor.execute(sql2,val2)
 
     for row in mycursor:
-        temp = row
         amount = amount + 1
+        
+    sql4 = "DELETE FROM Locates WHERE serialNo = %s;"
+    mycursor.execute(sql4, val)
 
     sql3 = "DELETE FROM DigitalDisplay WHERE serialNo = %s;"
     mycursor.execute(sql3,val)
 
     if(amount == 1):
-        sql4 = "DELETE FROM Model WHERE modelNo = %s;"
+        sql4 = "DELETE FROM Specializes WHERE modelNo = %s;"
         val4 = (modelNo[0],)
-        mycursor.execute(sql4,val4)       
+        mycursor.execute(sql4,val4)
+        
+        sql4 = "DELETE FROM Model WHERE modelNo = %s;"
+        mycursor.execute(sql4,val4) 
 
     #Display results after deletion
     Display()
@@ -184,7 +189,7 @@ def Update():
     serialNo = input("Input the serial number of the digital display that you would like to update: ")
     newSerialNo = input("Input the new serial number (or type it again if it is not changing): ")
     newSchedule = input("Input the new scheduler system (or type it again if it is not changing): ")
-    newModelNo = input("Input the new mdoel number (or type it again if it is not changing): ")
+    newModelNo = input("Input the new model number (or type it again if it is not changing): ")
 
     sql = "UPDATE DigitalDisplay SET serialNo = %s, schedulerSystem = %s, modelNo = %s WHERE serialNo = %s;"
     val = (newSerialNo, newSchedule, newModelNo, serialNo)
